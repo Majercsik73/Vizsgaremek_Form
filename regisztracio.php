@@ -63,7 +63,7 @@
     function nevLekerdezes(a){
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function() {
-                            alert(this.responseText);
+                            alert(this.responseText + "    JS");
                         }
         xhttp.open("GET", "felhlekerdez.php?q="+a);
         xhttp.send();
