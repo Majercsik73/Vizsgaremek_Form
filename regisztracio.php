@@ -59,7 +59,15 @@
 ?>
 
 <script>
-    
+    //Felhasználó név lekérés ellenőrzéshez
+    function nevLekerdezes(a){
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+                            alert(this.responseText);
+                        }
+        xhttp.open("GET", "felhlekerdez.php?q="+a);
+        xhttp.send();
+    }
     function formEllenorzes() {
         // Név ellenőrzése
         let a = document.forms["regist"]["nev"].value;
@@ -67,6 +75,7 @@
             alert("Név megadása kötelező!");
             return false;
         }
+        if(<?php ?>)
         // Lakcím ellenőrzése
         let b = document.forms["regist"]["lak"].value;
         if (b == "" || b == null) {
