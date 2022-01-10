@@ -58,94 +58,12 @@
     $request = $db->query($sql1);
 ?>
 
-<script>
-    //Felhasználó név lekérés ellenőrzéshez
-    function nevLekerdezes(a){
-        const xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-                            alert(this.responseText + "    JS");
-                        }
-        xhttp.open("GET", "felhlekerdez.php?q="+a);
-        xhttp.send();
-    }
-    function formEllenorzes() {
-        // Név ellenőrzése
-        let a = document.forms["regist"]["nev"].value;
-        if (a == "" || a == null) {
-            alert("Név megadása kötelező!");
-            return false;
-        }
-        if(<?php ?>)
-        // Lakcím ellenőrzése
-        let b = document.forms["regist"]["lak"].value;
-        if (b == "" || b == null) {
-            alert("Lakcím megadása kötelező!");
-            return false;
-        }
-        // Telefonszám ellenőrzés
-        let c = document.forms["regist"]["tel"].value;
-        if (c == "" || c == null) {
-            alert("Telefonszám megadása kötelező!");
-            return false;
-        }
-        // Telefonszám hossz ellenőrzés
-        if (c.length < 10) {
-            alert("Telefonszám túl rövid! Kérem használjon előhívó tagot és körzetszámot is!");
-            return false;
-        }
-        // Telefonszám karakterellenőrzés
-        let tel1 = c.match(/[A-z]/g);
-        let tel2 = c.match(/[§'"!@#$%^&*]/g);
-        if (tel1 != null || tel2 != null) {
-            alert("Telefonszám csak '+' előtagot és számokat tartalmazhat!");
-            return false;
-        }
-        // Email cím ellenőrzés
-        let d = document.forms["regist"]["email"].value;
-        if (d == "" || d == null) {
-            alert("Email cím megadása kötelező!");
-            return false;
-        }
-        // Jelszómezők ellenőrzése
-        // Első mező
-        let e = document.forms["regist"]["pw1"].value;
-        if (e == "" || e == null) {
-            alert("Az első jelszómező nincs kitöltve");
-            return false;
-        }
-        //Második mező
-        let f = document.forms["regist"]["pw2"].value;
-        if(f == "" || f == null) {
-            alert("A második jelszómező nincs kitöltve");
-            return false;
-        }
-        //Jelszavak összehasonlítás
-        if (e!=f) {
-            alert("A két jelszómező nem egyezik meg! JS");
-            return false;
-        }
-        // Jelszó hosszának ellenőrzése
-        if (e.length < 6) {
-            alert("A jelszónak minimum 6 karakter hosszúnak kell lennie! JS");
-            return false;
-        }
-        // Jelszó karakterellenőrzés
-        let jelszo1 = e.match(/[a-z]/g);
-        let jelszo2 = e.match(/[A-Z]/g);
-        let jelszo3 = e.match(/[0-9]/g);
-        //alert(jelszo1 + "    " + jelszo2 + "     " + jelszo3);
-        if (jelszo1 == null || jelszo2 == null || jelszo3 == null) {
-            alert("A jelszónak tartalmaznia kell kisbetűt, nagybetűt és számot!  JS");
-            return false;
-        }
-    }
-</script>
-
 <!DOCTYPE html>
 <html lang="hu">
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="reg.css"> 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <title>Burgeretterem-Regisztráció</title>
     </head>
     <body>  
@@ -213,3 +131,104 @@
         </form>
     </body>
 </html>
+<script>
+    //Felhasználó név lekérés ellenőrzéshez
+    /*function nevLekerdezes(a){
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+                            if(this.responseText != "" || this.resposeText != null){
+                                alert("A megadott felhasználónévvel már van regisztráció! \n Kérem adjon másikat!");
+                                return false;
+                            }
+                        }
+        xhttp.open("GET", "felhlekerdez.php?q="+a);
+        xhttp.send();
+        alert("this.responseText +     + a +    JS");
+    }*/
+    function formEllenorzes() {
+        // Névmező kitöltésének ellenőrzése
+        let a = document.forms["regist"]["nev"].value;
+        if (a == "" || a == null) {
+            alert("Név megadása kötelező!");
+            return false;
+        }
+
+        //A megadott felhasználónév AJAX lekérdezése a db-ből
+
+        let nev = "";
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+                            nev = this.responseText;
+                        }
+        xhttp.open("GET", "felhlekerdez.php?q="+a);
+        xhttp.send();
+        // Majd a válasz ellenőrzése
+        if (nev == "" || nev == null) {
+            alert("A megadott felhasználónévvel már van regisztráció! \n Kérem adjon másikat!");
+            return false;
+        }
+        
+        // Lakcím ellenőrzése
+        let b = document.forms["regist"]["lak"].value;
+        if (b == "" || b == null) {
+            alert("Lakcím megadása kötelező!");
+            return false;
+        }
+        // Telefonszám ellenőrzés
+        let c = document.forms["regist"]["tel"].value;
+        if (c == "" || c == null) {
+            alert("Telefonszám megadása kötelező!");
+            return false;
+        }
+        // Telefonszám hossz ellenőrzés
+        if (c.length < 10) {
+            alert("Telefonszám túl rövid! Kérem használjon előhívó tagot és körzetszámot is!");
+            return false;
+        }
+        // Telefonszám karakterellenőrzés
+        let tel1 = c.match(/[A-z]/g);
+        let tel2 = c.match(/[§'"!@#$%^&*]/g);
+        if (tel1 != null || tel2 != null) {
+            alert("Telefonszám csak '+' előtagot és számokat tartalmazhat!");
+            return false;
+        }
+        // Email cím ellenőrzés
+        let d = document.forms["regist"]["email"].value;
+        if (d == "" || d == null) {
+            alert("Email cím megadása kötelező!");
+            return false;
+        }
+        // Jelszómezők ellenőrzése
+        // Első mező
+        let e = document.forms["regist"]["pw1"].value;
+        if (e == "" || e == null) {
+            alert("Az első jelszómező nincs kitöltve");
+            return false;
+        }
+        //Második mező
+        let f = document.forms["regist"]["pw2"].value;
+        if(f == "" || f == null) {
+            alert("A második jelszómező nincs kitöltve");
+            return false;
+        }
+        //Jelszavak összehasonlítás
+        if (e!=f) {
+            alert("A két jelszómező nem egyezik meg! JS");
+            return false;
+        }
+        // Jelszó hosszának ellenőrzése
+        if (e.length < 6) {
+            alert("A jelszónak minimum 6 karakter hosszúnak kell lennie! JS");
+            return false;
+        }
+        // Jelszó karakterellenőrzés
+        let jelszo1 = e.match(/[a-z]/g);
+        let jelszo2 = e.match(/[A-Z]/g);
+        let jelszo3 = e.match(/[0-9]/g);
+        //alert(jelszo1 + "    " + jelszo2 + "     " + jelszo3);
+        if (jelszo1 == null || jelszo2 == null || jelszo3 == null) {
+            alert("A jelszónak tartalmaznia kell kisbetűt, nagybetűt és számot!  JS");
+            return false;
+        }
+    }
+</script>

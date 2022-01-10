@@ -1,10 +1,13 @@
 <?php 
-    
-    include("dbconnect.php"); 
+    //include("dbconnect.php");
+    $mysqli = new mysqli("localhost", "root", "", "burgeretterem");
+    if($mysqli->connect_error) {
+        echo"<script>alert('Could not connect')</script>";
+    }
 
     //Felhasználó név lekérés ellenőrzéshez
     $sql = "SELECT nev FROM felhasznalo WHERE nev = ?";
-    //$result2 = $db->query($sql2);
+    //$result = $db->query($sql);
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("s", $_GET['q']);
     $stmt->execute();
@@ -12,9 +15,9 @@
     $stmt->bind_result($nev);
     $stmt->fetch();
     $stmt->close();
+    echo $nev;
     /*if($result2->num_rows > 0){
-        echo "<script>alert('A felhasználónév már létezik, adj meg egy másikat!')</script>";
-        header("regisztracio.php");
+        echo "Alert";
     }*/
 
 
