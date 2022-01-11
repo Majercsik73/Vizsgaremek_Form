@@ -1,25 +1,19 @@
 <?php 
-    //include("dbconnect.php");
+    
     $mysqli = new mysqli("localhost", "root", "", "burgeretterem");
     if($mysqli->connect_error) {
-        exit('Could not connect');
+        echo"<script>alert('Could not connect')</script>";
     }
 
     //Felhasználó név lekérés ellenőrzéshez
-    $sql = "SELECT nev FROM felhasznalo WHERE nev = ?";
-    //$result = $db->query($sql);
+    $sql = "SELECT email FROM felhasznalo WHERE email = ?";
+    
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("s", $_GET['q']);
     $stmt->execute();
     $stmt->store_result();
-    $stmt->bind_result($nev);
+    $stmt->bind_result($email);
     $stmt->fetch();
     $stmt->close();
-    echo $nev;
-    /*if($result2->num_rows > 0){
-        echo "Alert";
-    }*/
-
-
-
+    echo $email;
 ?>

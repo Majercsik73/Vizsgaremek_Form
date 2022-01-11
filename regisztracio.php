@@ -96,10 +96,10 @@
         <form name="regist" method = "POST" action="" onsubmit="return formEllenorzes()">
             <table class = "ujfelhasznalo">
                 <tr><td><strong>Regisztráció:</strong></td></tr>
-                <!--<tr class="hidden">
-                    <td>Azonosító:</td>
-                    <td><input type="text" name="azon" value="55" ></td>
-                </tr>-->
+                <tr class="hidden">
+                    <td><p id="nevellenorzes"></p></td>
+                    <td><p id="emailellenorzes"></p></td>
+                </tr>
                 <tr>
                     <td>Név:</td>
                     <td><input type="text" name="nev" id="nev" style="width: 240px;" placeholder="teljes név"></td>
@@ -132,19 +132,7 @@
     </body>
 </html>
 <script>
-    //Felhasználó név lekérés ellenőrzéshez
-    /*function nevLekerdezes(a){
-        const xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-                            if(this.responseText != "" || this.resposeText != null){
-                                alert("A megadott felhasználónévvel már van regisztráció! \n Kérem adjon másikat!");
-                                return false;
-                            }
-                        }
-        xhttp.open("GET", "felhlekerdez.php?q="+a);
-        xhttp.send();
-        alert("this.responseText +     + a +    JS");
-    }*/
+    
     function formEllenorzes() {
         // Névmező kitöltésének ellenőrzése
         let a = document.forms["regist"]["nev"].value;
@@ -152,22 +140,23 @@
             alert("Név megadása kötelező!");
             return false;
         }
-
+        let nev = 0;
         //A megadott felhasználónév AJAX lekérdezése a db-ből
+        const xp1 = new XMLHttpRequest();
+        xp1.open("GET", "felhlekerdez.php?q="+a);
+        xp1.send();
+        xp1.onload = function() {
+                            alert(this.responseText);
+                            alert(this.responseText.length);
+                            nev += this.responseText.length;
+                            if (nev > 0){
+                                alert("Döntésben vagyok!");
+                            }
 
-        let nev = "";
-        const xhttp = new XMLHttpRequest();
-        xhttp.onload = function() {
-                            nev = this.responseText;
                         }
-        xhttp.open("GET", "felhlekerdez.php?q="+a);
-        xhttp.send();
         // Majd a válasz ellenőrzése
-        if (nev == "" || nev == null) {
-            alert("A megadott felhasználónévvel már van regisztráció! \n Kérem adjon másikat!");
-            return false;
-        }
-        
+        alert(nev + "    ------");
+
         // Lakcím ellenőrzése
         let b = document.forms["regist"]["lak"].value;
         if (b == "" || b == null) {
@@ -198,6 +187,23 @@
             alert("Email cím megadása kötelező!");
             return false;
         }
+        //A megadott email cím AJAX lekérdezése a db-ből
+        alert(nev + "    +++++++");
+        const xhttp2 = new XMLHttpRequest();
+        xhttp2.onload = function() {
+                            if(this.responseText != "" || this.responseText != null){
+                                return false;
+                            }
+                        }
+        xhttp2.open("GET", "felhlekerdez.php?q="+d);
+        xhttp2.send();
+
+        // Majd a válasz ellenőrzése
+        if (xhttp2.onload()) {
+            alert("A megadott emailcímmel már van regisztráció! \n Kérem adjon másikat!    AJAX");
+            return false;
+        }
+        
         // Jelszómezők ellenőrzése
         // Első mező
         let e = document.forms["regist"]["pw1"].value;
@@ -230,5 +236,26 @@
             alert("A jelszónak tartalmaznia kell kisbetűt, nagybetűt és számot!  JS");
             return false;
         }
+        alert("Kód vége");
+        
+        //A megadott felhasználónév AJAX lekérdezése a db-ből
+        /*const xp1 = new XMLHttpRequest();
+        xp1.open("GET", "felhlekerdez.php?q="+a);
+        xp1.send();
+        xp1.onload = function() {
+                            alert(this.responseText);
+                            alert(this.responseText.length);
+                            if (this.responseText.length > 0){
+                                alert("Döntésben vagyok!");
+                            }
+
+                        }*/
+        alert("///////////");
+        
+        /*if ( nev > 0) {
+            alert("Valami");
+            alert("A megadott felhasználónévvel már van regisztráció! \n Kérem adjon másikat!");
+            return false;
+        }*/
     }
 </script>
