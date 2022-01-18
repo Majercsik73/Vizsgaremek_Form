@@ -49,11 +49,7 @@
                 echo "<script>location.href = 'foglalas.php'</script>";
             }
     }        
-    //Lekérdezés
 
-    $sql1 = "SELECT * FROM felhasznalo ORDER BY azon DESC LIMIT 4 ";
-    $request = $db->query($sql1);
-    
 ?>
 
 <!DOCTYPE html>

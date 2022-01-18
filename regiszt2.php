@@ -1,8 +1,7 @@
-
 <?php
     include("dbconnect.php");
     
-    
+    session_start();
 
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
@@ -10,7 +9,7 @@
         if(isset($_POST["nev"]) && isset($_POST["lak"]) && isset($_POST["tel"]) &&
             isset($_POST["email"]) && isset($_POST["pw1"]) && isset($_POST["pw2"]))
             {
-                session_start();
+                
                 $nev = $_POST["nev"];
                 $lak = $_POST["lak"];
                 $tel = $_POST["tel"];
@@ -18,7 +17,6 @@
                 $pw1 = $_POST["pw1"];
                 $pw2 = $_POST["pw2"];
                 $_SESSION['Felhasznalonev'] = $nev;
-                $_SESSION['Email'] = $email;
                 
                 //Felhasználó név lekérés ellenőrzéshez
                 $sql2 = "SELECT * FROM felhasznalo WHERE nev = '$nev'";
@@ -33,12 +31,12 @@
                 if($result2->num_rows > 0){
                     echo "<script>alert('A felhasználónév már létezik, adj meg egy másikat!')</script>";
                     //echo"<script>document.getElementById('nev').value =</script>".$_SESSION['Felhasznalonev'];
-                    echo "<script>location.href='regiszt2.php'</script>";
+                    //header("regisztracio.php");
                 }
                 // Email cím
                 elseif($result3->num_rows > 0){
                     echo "<script>alert('Ezzel az e-mail címmel már regisztráltak, adj meg egy másikat!')</script>";
-                    echo "<script>location.href='regiszt2.php'</script>";
+                    //header("regisztracio.php");
                 }
                 //Ha minden rendben, az új felhasználót felvesszük a db-be
                 else{   
@@ -110,7 +108,7 @@
                 </tr>
                 <tr>
                     <td>Név:</td>
-                    <td><input type="text" name="nev" id="nev" style="width: 240px;" placeholder="felhasználónév"></td>
+                    <td><input type="text" name="nev" id="nev" style="width: 240px;" value="<?php echo "".$_SESSION['Felhasznalonev']?>" placeholder="felhasználónév"></td>
                 </tr>
                 <tr>
                     <td>Lakhely:</td>
