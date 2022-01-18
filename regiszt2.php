@@ -17,6 +17,11 @@
                 $pw1 = $_POST["pw1"];
                 $pw2 = $_POST["pw2"];
                 $_SESSION['Felhasznalonev'] = $nev;
+                $_SESSION['Lakcim'] = $lak;
+                $_SESSION['Telefon'] = $tel;
+                $_SESSION['Email'] = $email;
+                $_SESSION['pw1'] = $pw1;
+                $_SESSION['pw2'] = $pw2;
                 
                 //Felhasználó név lekérés ellenőrzéshez
                 $sql2 = "SELECT * FROM felhasznalo WHERE nev = '$nev'";
@@ -30,13 +35,10 @@
                 // Név
                 if($result2->num_rows > 0){
                     echo "<script>alert('A felhasználónév már létezik, adj meg egy másikat!')</script>";
-                    //echo"<script>document.getElementById('nev').value =</script>".$_SESSION['Felhasznalonev'];
-                    //header("regisztracio.php");
                 }
                 // Email cím
                 elseif($result3->num_rows > 0){
                     echo "<script>alert('Ezzel az e-mail címmel már regisztráltak, adj meg egy másikat!')</script>";
-                    //header("regisztracio.php");
                 }
                 //Ha minden rendben, az új felhasználót felvesszük a db-be
                 else{   
@@ -50,12 +52,11 @@
                     session_unset();
                     echo "<script>alert('Köszönjük a regisztrációt!')</script>";
                     
-                    header("Refresh:0");  //header("index.php");  // Ne ragadjonak be az adatok!!!!
+                    header("Refresh:0");  // Ne ragadjonak be az adatok!!!!
                     
                     echo "<script>location.href='index.php'</script>";
                 }  
             }
-            //session_unset();  
     }
     
     //Lekérdezés
@@ -112,23 +113,23 @@
                 </tr>
                 <tr>
                     <td>Lakhely:</td>
-                    <td><input type="text" name="lak" id="lak" style="width: 240px;" placeholder="teljes lakcím"></td>
+                    <td><input type="text" name="lak" id="lak" style="width: 240px;" value="<?php echo "".$_SESSION['Lakcim']?>" placeholder="teljes lakcím"></td>
                 </tr>
                 <tr>
                     <td>Telefonszám:</td>
-                    <td><input type="text" name="tel" id="tel" style="width: 240px;" placeholder="pl.:+36801111111"></td>
+                    <td><input type="text" name="tel" id="tel" style="width: 240px;" value="<?php echo "".$_SESSION['Telefon']?>" placeholder="pl.:+36801111111"></td>
                 </tr>
                 <tr>
                     <td>E-mail cím:</td>
-                    <td><input type="email" name="email" id="email" style="width: 240px;" placeholder="valami@valami.com"></td>
+                    <td><input type="email" name="email" id="email" style="width: 240px;" value="<?php echo "".$_SESSION['Email']?>" placeholder="valami@valami.com"></td>
                 </tr>
                 <tr>
                     <td>Jelszó:</td>
-                    <td><input type="password" name="pw1" id="pw1" style="width: 240px;"placeholder="min. 6 karakter; kibetű, nagybetű, szám"></td>
+                    <td><input type="password" name="pw1" id="pw1" style="width: 240px;" value="<?php echo "".$_SESSION['pw1']?>" placeholder="min. 6 karakter; kibetű, nagybetű, szám"></td>
                 </tr>
                 <tr>
                     <td>Jelszó újra:</td>
-                    <td><input type="password" name="pw2" id="pw2" style="width: 240px;" placeholder="jelszó megerősítése"></td>
+                    <td><input type="password" name="pw2" id="pw2" style="width: 240px;" value="<?php echo "".$_SESSION['pw2']?>" placeholder="jelszó megerősítése"></td>
                 </tr>
                 <tr>
                     <td><input type="submit" value="Regisztrálok"></td>
@@ -138,28 +139,7 @@
     </body>
 </html>
 <script>
-    
-    function vanNev(a){
-        let nev = 0;
-        const xp1 = new XMLHttpRequest();
-            xp1.open("GET", "felhlekerdez.php?q="+a);
-            xp1.send();
-            xp1.onload = function() {
-                    alert(this.responseText);
-                    alert(this.responseText.length);
-                    nev += this.responseText.length;
-                    return nev;
-                }
-        return nev;
-        /*if(nev > 0){
-            alert('vanNev if');
-            return false;
-        }
-        else{
-            alert('vanNev else');
-            return true;
-        }*/
-    }
+  
     function formEllenorzes() {
         // Névmező kitöltésének ellenőrzése
         let a = document.forms["regist"]["nev"].value;
@@ -167,29 +147,6 @@
             alert("Név megadása kötelező!");
             return false;
         }
-        
-        let nev = 0;
-        //A megadott felhasználónév AJAX lekérdezése a db-ből
-        if (vanNev(a) > 0){
-            alert("formEll vanNev-ben vagyok");
-            return false;
-            /*const xp1 = new XMLHttpRequest();
-            xp1.open("GET", "felhlekerdez.php?q="+a);
-            xp1.send();
-            xp1.onload = function() {
-                    alert(this.responseText);
-                    alert(this.responseText.length);
-                    nev += this.responseText.length;
-                    if (nev > -1){
-                        alert("Döntésben vagyok!");
-                        vanNev(nev);
-                    }
-
-                }*/
-        }
-        // Majd a válasz ellenőrzése
-        alert(nev + "    ------");
-
         // Lakcím ellenőrzése
         let b = document.forms["regist"]["lak"].value;
         if (b == "" || b == null) {
@@ -220,23 +177,6 @@
             alert("Email cím megadása kötelező!");
             return false;
         }
-        //A megadott email cím AJAX lekérdezése a db-ből
-        alert(nev + "    +++++++");
-        /*const xhttp2 = new XMLHttpRequest();
-        xhttp2.onload = function() {
-                            if(this.responseText != "" || this.responseText != null){
-                                return false;
-                            }
-                        }
-        xhttp2.open("GET", "felhlekerdez.php?q="+d);
-        xhttp2.send();
-
-        // Majd a válasz ellenőrzése
-        if (xhttp2.onload()) {
-            alert("A megadott emailcímmel már van regisztráció! \n Kérem adjon másikat!    AJAX");
-            return false;
-        }*/
-        
         // Jelszómezők ellenőrzése
         // Első mező
         let e = document.forms["regist"]["pw1"].value;
@@ -269,26 +209,6 @@
             alert("A jelszónak tartalmaznia kell kisbetűt, nagybetűt és számot!  JS");
             return false;
         }
-        alert("Kód vége");
-        
-        //A megadott felhasználónév AJAX lekérdezése a db-ből
-        /*const xp1 = new XMLHttpRequest();
-        xp1.open("GET", "felhlekerdez.php?q="+a);
-        xp1.send();
-        xp1.onload = function() {
-                            alert(this.responseText);
-                            alert(this.responseText.length);
-                            if (this.responseText.length > 0){
-                                alert("Döntésben vagyok!");
-                            }
-
-                        }*/
-        alert("///////////");
-        
-        /*if ( nev > 0) {
-            alert("Valami");
-            alert("A megadott felhasználónévvel már van regisztráció! \n Kérem adjon másikat!");
-            return false;
-        }*/
+        alert("JS ellenőrzés vége");
     }
 </script>
